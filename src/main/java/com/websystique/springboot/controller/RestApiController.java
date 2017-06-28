@@ -67,8 +67,6 @@ public class RestApiController {
 			user.getName() + " already exist."),HttpStatus.CONFLICT);
 		}
 		
-	
-		
 		Double taxamount = 0.0;
 		
 		if(user.getImpfood()!=0){

@@ -13,6 +13,7 @@ public class AppController {
 		modal.addAttribute("title","Sales Tax Calculator");
 		return "index";
 	}
+	
 
 	@RequestMapping("/partials/{page}")
 	String partialHandler(@PathVariable("page") final String page) {

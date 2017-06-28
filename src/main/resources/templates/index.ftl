@@ -7,7 +7,7 @@
         <link href="css/app.css" rel="stylesheet"/>
         <link href="css/style.css" rel="stylesheet"/>
     </head>
-    <body>
+    <body >
 
         <div ui-view></div>
         <script src="js/lib/angular.min.js" ></script>
@@ -17,5 +17,6 @@
         <script src="js/app/app.js"></script>
         <script src="js/app/UserService.js"></script>
         <script src="js/app/UserController.js"></script>
+       
     </body>
 </html>

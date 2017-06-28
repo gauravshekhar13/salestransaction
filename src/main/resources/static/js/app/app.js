@@ -1,8 +1,8 @@
 var app = angular.module('crudApp',['ui.router','ngStorage']);
 
 app.constant('urls', {
-    BASE: 'http://localhost:8080/SalesTransaction',
-    USER_SERVICE_API : 'http://localhost:8080/SalesTransaction/api/user/'
+    BASE: 'http://salescalculator.cfapps.io/SalesTransaction',
+    USER_SERVICE_API : 'http://salescalculator.cfapps.io/SalesTransaction/api/user/'
 });
 
 app.config(['$stateProvider', '$urlRouterProvider',
