@@ -1,6 +1,6 @@
 package com.websystique.springboot.controller;
 
-import java.text.DecimalFormat;
+
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class RestApiController {
 	@Autowired
 	UserService userService; //Service which will do all data retrieval/manipulation work
 
-	// -------------------Retrieve All Users---------------------------------------------
+	// -------------------Retrieve All Transactions---------------------------------------------
 
 	@RequestMapping(value = "/user/", method = RequestMethod.GET)
 	public ResponseEntity<List<User>> listAllUsers() {
@@ -55,15 +55,15 @@ public class RestApiController {
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 
-	// -------------------Create a User-------------------------------------------
+	// -------------------Create a Transaction Record-------------------------------------------
 
 	@RequestMapping(value = "/user/", method = RequestMethod.POST)
 	public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating User : {}", user);
 
 		if (userService.isUserExist(user)) {
-			logger.error("Unable to create. A User with name {} already exist", user.getName());
-			return new ResponseEntity(new CustomErrorType("Unable to create. A User with name " + 
+			logger.error("Unable to create a transaction. A Transaction with name {} already exist", user.getName());
+			return new ResponseEntity(new CustomErrorType("Unable to create a transaction. A transaction with name " + 
 			user.getName() + " already exist."),HttpStatus.CONFLICT);
 		}
 		
@@ -154,7 +154,7 @@ public class RestApiController {
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------- Update a User ------------------------------------------------
+	// ------------------- Update a TransactionRecord ------------------------------------------------
 
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateUser(@PathVariable("id") long id, @RequestBody User user) {
@@ -177,7 +177,7 @@ public class RestApiController {
 		return new ResponseEntity<User>(currentUser, HttpStatus.OK);
 	}
 
-	// ------------------- Delete a User-----------------------------------------
+	// ------------------- Delete a Record-----------------------------------------
 
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
@@ -193,7 +193,7 @@ public class RestApiController {
 		return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
 	}
 
-	// ------------------- Delete All Users-----------------------------
+	// ------------------- Delete All Sales Records-----------------------------
 
 	@RequestMapping(value = "/user/", method = RequestMethod.DELETE)
 	public ResponseEntity<User> deleteAllUsers() {
