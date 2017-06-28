@@ -1,5 +1,4 @@
 var app = angular.module('crudApp',['ui.router','ngStorage']);
-
 app.config(function($routeProvider) {
   $routeProvider.when('/login', {
     templateUrl: 'login.html',
