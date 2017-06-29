@@ -11,7 +11,7 @@ public class AppController {
 	@RequestMapping("/")
 	String home(ModelMap modal) {
 		modal.addAttribute("title","Sales Tax Calculator");
-		return "index";
+		return "login";
 	}
 	
 

@@ -1,65 +1,94 @@
-var app = angular.module('crudApp',['ui.router','ngStorage']);
-app.config(function($routeProvider) {
-  $routeProvider.when('/login', {
-    templateUrl: 'login.html',
-    controller: 'LoginCtrl'
-  });
-  $routeProvider.when('/', {
-    templateUrl: 'partials/list',
-    controller: 'UserController'
-  });
-  $routeProvider.otherwise({ redirectTo: '/' });
-});
-app.run(function(authentication, $rootScope, $location) {
-  $rootScope.$on('$routeChangeStart', function(evt) {
-    if(!authentication.isAuthenticated){ 
-      $location.url("/login");
-    }
-    event.preventDefault();
-  });
-})
-
-app.controller('LoginCtrl', function($scope, $http, $location, authentication) {
-  $scope.login = function() {
-    if ($scope.username === 'admin' && $scope.password === 'pass') {
-      console.log('successful')
-      authentication.isAuthenticated = true;
-      authentication.user = { name: $scope.username };
-      $location.url("/");
-    } else {
-      $scope.loginError = "Invalid username/password combination";
-      console.log('Login failed..');
-    };
-  };
-});
-
-app.controller('AppCtrl', function($scope, authentication) {
-  $scope.templates =
-  [
-  	{ url: 'login.html' },
-  	{ url: 'list.ftl' }
-  ];
-    $scope.template = $scope.templates[0];
-  $scope.login = function (username, password) {
-    if ( username === 'admin' && password === '1234') {
-  		authentication.isAuthenticated = true;
-  		$scope.template = $scope.templates[1];
-  		$scope.user = username;
-    } else {
-  		$scope.loginError = "Invalid username/password combination";
-    };
-  };
+(function() {
+  var app = angular.module('crudApp', ['ui.router','ngStorage']);
   
-});
-
-app.controller('HomeCtrl', function($scope, authentication) {
-  $scope.user = authentication.user.name;
+  app.run(function($rootScope, $location, $state, LoginService) {
+    $rootScope.$on('$stateChangeStart', 
+      function(event, toState, toParams, fromState, fromParams){ 
+          console.log('Changed state to: ' + toState + toParams);
+      });
+    
+      if(!LoginService.isAuthenticated()) {
+        $state.transitionTo('login');
+      }
+  });
   
-});
+  app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise('/home');
+    
+    $stateProvider
+      .state('login', {
+        url : '/login',
+        templateUrl : 'login',
+        controller : 'LoginController'
+      })
+      .state('home1', {
+        url : '/',
+        templateUrl : 'home.html',
+        controller:'HomeController',
+        
+      })
+      .state('list', {
+    	  url : '/',
+          templateUrl : 'partials/list',
+    	  controller:'UserController',
+          controllerAs:'ctrl',
+          resolve: {
+              users: function ($q, UserService) {
+                  console.log('Load all users');
+                  var deferred = $q.defer();
+                  UserService.loadAllUsers().then(deferred.resolve, deferred.resolve);
+                  return deferred.promise;
+              }
+          }
 
-app.factory('authentication', function() {
-  return {
-    isAuthenticated: false,
-    user: null
-  }
-});
+        });
+  }]);
+
+  app.controller('LoginController', function($scope, $rootScope, $stateParams, $state, LoginService) {
+    $rootScope.title = "SalesCalculator";
+    
+    $scope.formSubmit = function() {
+      if(LoginService.login($scope.username, $scope.password)) {
+        $scope.error = '';
+        $scope.username = '';
+        $scope.password = '';
+        $state.transitionTo('home1');
+        
+      } else {
+        $scope.error = "Incorrect username/password !";
+      }   
+    };
+    
+  });
+  
+  
+  
+  
+  
+  app.controller('HomeController', function($scope, $rootScope, $stateParams, $state, LoginService) {
+	  console.log('HomeController call');
+	  if(true) {
+		  console.log('state is list'); 
+	  }
+	  
+  });
+  
+  
+  app.factory('LoginService', function() {
+    var admin = 'admin';
+    var pass = 'pass';
+    var isAuthenticated = false;
+    
+    return {
+      login : function(username, password) {
+        isAuthenticated = username === admin && password === pass;
+        return isAuthenticated;
+      },
+      isAuthenticated : function() {
+        return isAuthenticated;
+      }
+    };
+    
+  });
+  
+})();
