@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AppController {
 
 	@RequestMapping("/")
-	String home(ModelMap modal) {
+	String home(final ModelMap modal) {
 		modal.addAttribute("title","Sales Tax Calculator");
 		return "login";
 	}
